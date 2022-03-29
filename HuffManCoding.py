@@ -1,4 +1,4 @@
-string = "BCAADDDCCACACAC"
+# string = "BCAADDDCCACACAC"
 
 class Node:
 
@@ -8,7 +8,7 @@ class Node:
 		self.data = data
 
 
-def huffManTree():
+def huffManTree(string):
 	codefreq = {}
 
 	for chars in string:
@@ -34,17 +34,18 @@ def huffManTree():
 	return pQueue[0],codefreq
 
 
-myTree = huffManTree()[0]
+# myTree = huffManTree()[0]
 huffman_dict = {}
-def PreOrder(root,s=''):
+def PreOrder(root,freq,s=''):
+	# print(freq)
 	if root.left == None and root.right == None:
 		# print(str(root.data)+" : "+s)
-		huffman_dict[list(huffManTree()[1].keys())[list(huffManTree()[1].values()).index(root.data)]] = s
+		huffman_dict[list(freq.keys())[list(freq.values()).index(root.data)]] = s
 		return
 	# print(root.data)
-	PreOrder(root.left,s+'0')
-	PreOrder(root.right,s+'1')
+	PreOrder(root.left,freq,s+'0')
+	PreOrder(root.right,freq,s+'1')
 	return huffman_dict
-code_dict = PreOrder(myTree)
-print(code_dict)
+# code_dict = PreOrder(myTree)
+# print(code_dict)
 

@@ -27,11 +27,13 @@ def extract_encoded_data_from_DCT(blocks):
 stego_image     = cv2.imread(src.stego_image_loc, flags=cv2.IMREAD_COLOR)
 stego_image_f32 = np.float32(stego_image)
 height,width = stego_image_f32.shape[:2]
+req_dim = height
+if height>width: req_dim = width
 converted = cv2.cvtColor(stego_image_f32, cv2.COLOR_BGR2YCrCb)
 new_mat = [p.split_image(height,width,converted[:,:,0])]
 dims = np.array(new_mat[0]).shape
-dct_blocks = [[cv2.dct(block) for block in new_mat[0][i]] for i in range(int(width/8))]
-dct_quants = [[np.divide(item, p.QUANT_TABLE) for item in dct_blocks[i]] for i in range(int(width/8))]
+dct_blocks = [[cv2.dct(block) for block in new_mat[0][i]] for i in range(int(req_dim/8))]
+dct_quants = [[np.divide(item, p.QUANT_TABLE) for item in dct_blocks[i]] for i in range(int(req_dim/8))]
 # print("DCT Quants:\n")
 # print(dct_quants)
 # print(np.array(dct_quants).shape)
