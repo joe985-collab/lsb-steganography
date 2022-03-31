@@ -7,9 +7,10 @@ import prep as p
 import bitstring
 # cover_image_loc = "./"+str(input("Choose a cover image in PNG format: "))
 np.set_printoptions(threshold=sys.maxsize)
-cover_image_loc = "./quelaag.png"
-stego_image_loc = "./quelaag1.png"
-msg = "Amazing chest ahead!"
+cover_image_loc = "./cat.png"
+stego_image_loc = "./cat_message.png"
+# msg = "Meet me at this place at 9 am"
+msg = "Lorem ipsum dolor sit amet."
 # stego_image_loc = "./"+str(input("Choose name of the stego image: "))
 # secret_message = input("Enter your secret message: ");
 # print(cover_image_loc)
@@ -57,6 +58,7 @@ for channels in range(3):
     dct_2 = [[cv2.dct(x) for x in new_operable_mat[channels][i]] for i in range(int(req_dim/8))]
     # Quantization stage
     quantized = [[np.around(np.divide(x,p.QUANT_TABLE)) for x in dct_2[i]] for i in range(int(req_dim/8))]
+    # print(quantized[0][0].shape)
     # print(dct_2)
     if channels ==  0:
         transformed = embed.embed_encoded_data_into_DCT(secret_data,quantized)
@@ -65,10 +67,8 @@ for channels in range(3):
 
     # DeQuantization stage
     dequantized = [[np.multiply(x,p.QUANT_TABLE) for x in transformed[i]] for i in range(int(req_dim/8))]
-
     #Apply IDCT
     idct_blocks = [[cv2.idct(np.float32(x)) for x in dequantized[i]] for i in range(int(req_dim/8))]
-
      # Rebuild full image channel into the stego image
     stego_image_float[:,:,channels] = np.asarray(p.orig_dim_image(idct_blocks))
 # Convert back to RGB (BGR) Colorspace
@@ -76,7 +76,7 @@ stego_image_BGR = cv2.cvtColor(stego_image_float, cv2.COLOR_YCR_CB2BGR)
 
 # # Clamp Pixel Values to [0 - 255]
 final_stego_image = np.uint8(np.clip(stego_image_BGR, 0, 255))
-
+# print(final_stego_image)
 # # Write stego image
 cv2.imwrite(stego_image_loc, final_stego_image)
 

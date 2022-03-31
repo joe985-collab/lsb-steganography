@@ -28,7 +28,7 @@ def embed_encoded_data_into_DCT(encoded_bits,dct_blocks):
             converted_blocks.append(t)
     for blk in converted_blocks:
         blk[:4] = ifwht(np.float32(blk[:4]))
-    if not(data_complete): raise ValueError("Data didn't fully embed into cover image!")
+    if not data_complete: raise ValueError("Data didn't fully embed into cover image!")
     converted_blocks = np.array(converted_blocks).reshape(dim[0],dim[1],dim[2],dim[3])
     # print("Converted blocks:\n")
     # print(converted_blocks)
