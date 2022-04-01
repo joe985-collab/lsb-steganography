@@ -25,9 +25,10 @@ req_dim = height
 if height>width: req_dim = width
 new_valid_dim = (width,height)
 padded_image = cv2.resize(read_cover_image,new_valid_dim)
+# print(padded_image)
 # cover_image_float = np.float32(padded_image)
 cover_image_float = np.float32(padded_image)
-print(cover_image_float.shape)
+# print(cover_image_float.shape)
 converted = cv2.cvtColor(cover_image_float,cv2.COLOR_BGR2YCrCb)
 
 # split the matrix into different channels of YCrCb
@@ -38,11 +39,17 @@ for channels in range(3):
     dct_2 = [[cv2.dct(x) for x in new_operable_mat[channels][i]] for i in range(int(height/8))]
     # Quantization stage
     quantized = [[np.around(np.divide(x,p.QUANT_TABLE)) for x in dct_2[i]] for i in range(int(height/8))]
+    dequantized = [[np.multiply(x,p.QUANT_TABLE) for x in quantized[i]] for i in range(int(req_dim/8))]
+    #Apply IDCT
+    idct_blocks = [[cv2.idct(np.float32(x)) for x in dequantized[i]] for i in range(int(req_dim/8))]
+    # print(idct_blocks)
+    li = np.asarray(p.orig_dim_image(idct_blocks))
+    cover_image_float[:,:,channels] = li
     items = np.array(quantized).flatten()
     # print(items)
     for m in items:
     	huffman_list.append(str(m))
-
+print(cover_image_float)
 # print(huffman_list)
 myHuffmanTree = hcoding.huffManTree(huffman_list)
 # print(myHuffmanTree[1])

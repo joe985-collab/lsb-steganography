@@ -4,13 +4,21 @@ import cv2
 import embed
 import numpy as np
 import prep as p
-import bitstring
 # cover_image_loc = "./"+str(input("Choose a cover image in PNG format: "))
 np.set_printoptions(threshold=sys.maxsize)
 cover_image_loc = "./cat.png"
 stego_image_loc = "./cat_message.png"
 # msg = "Meet me at this place at 9 am"
-msg = "Lorem ipsum dolor sit amet."
+msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+msg_length = len(msg)
+msg1 = str(msg_length)+msg
+# print(msg1[1].isnumeric())
+binary_msg = ' '.join(format(ord(x), 'b') if int(ord(x))>63 else '0'+format(ord(x), 'b')  for x in msg1).replace(" ","")
+secret_data = binary_msg
+# print(binary_msg)
+# for i in range(0,len(binary_msg),7):
+#     tst =  binary_msg[i:i+7]
+#     secret_data += chr(int(tst,2))
 # stego_image_loc = "./"+str(input("Choose name of the stego image: "))
 # secret_message = input("Enter your secret message: ");
 # print(cover_image_loc)
@@ -45,8 +53,8 @@ stego_image_float = np.empty_like(cover_image_float)
 # new_operable_mat = np.array(new_operable_mat).reshape(dims[0],dims[1]*dims[2],dims[3],dims[4])
 # print(new_operable_mat.shape)
 
-secret_data = ""
-for char in msg.encode('ascii'): secret_data += bitstring.pack('uint:8', char)
+# secret_data = ""
+# for char in msg.encode('ascii'): secret_data += bitstring.pack('uint:8', char)
 # embedded_dct_blocks   = stego.embed_encoded_data_into_DCT(secret_data, sorted_coefficients)
 # print(secret_data)
 
@@ -60,10 +68,8 @@ for channels in range(3):
     quantized = [[np.around(np.divide(x,p.QUANT_TABLE)) for x in dct_2[i]] for i in range(int(req_dim/8))]
     # print(quantized[0][0].shape)
     # print(dct_2)
-    if channels ==  0:
-        transformed = embed.embed_encoded_data_into_DCT(secret_data,quantized)
-    else:
-        transformed = quantized
+    transformed = embed.embed_encoded_data_into_DCT(secret_data,quantized)
+
 
     # DeQuantization stage
     dequantized = [[np.multiply(x,p.QUANT_TABLE) for x in transformed[i]] for i in range(int(req_dim/8))]
@@ -79,12 +85,4 @@ final_stego_image = np.uint8(np.clip(stego_image_BGR, 0, 255))
 # print(final_stego_image)
 # # Write stego image
 cv2.imwrite(stego_image_loc, final_stego_image)
-
-
-
-
-
-
-
-
 
