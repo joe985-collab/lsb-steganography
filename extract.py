@@ -19,20 +19,24 @@ def extract_encoded_data_from_DCT(blocks):
                 init_strg = ""
             else:
                 init_strg = ""
+                skip = len(lenString)
                 lenString = int(lenString)
                 break
         count+=1
         init_strg += str(round(current[0])&1)
     
     char_count = 0
+    to_skip = 0
     for current in blocks:
         if count%7 == 0 and count>0:
             count = 0
             if char_count==lenString: break
-            if not chr(int(init_strg,2)).isnumeric():
+            if to_skip>=skip:
                 myString +=  chr(int(init_strg,2))
                 # print(myString)
                 char_count += 1
+            else:
+                to_skip+=1
             init_strg = ""
         count+=1
         init_strg += str(round(current[0])&1)
