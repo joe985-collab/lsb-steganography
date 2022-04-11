@@ -9,7 +9,7 @@ np.set_printoptions(threshold=sys.maxsize)
 cover_image_loc = "./cat.png"
 stego_image_loc = "./cat_message.png"
 # msg = "Meet me at this place at 9 am"
-msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+msg = "Meet me at XYZ by 9 am sharp tomorrow."
 msg_length = len(msg)
 msg1 = str(msg_length)+msg
 # print(msg1[1].isnumeric())

@@ -40,7 +40,7 @@ huffman_dict1 = {}
 def PreOrder(root,freq,s=''):
 	# print(freq)
 	if root.left == None and root.right == None:
-		print(str(root.data)+" : "+s)
+		# print(str(root.data)+" : "+s)
 		for key,val in freq.items():
 			if root.data == val: 
 				huffman_dict[s] = key

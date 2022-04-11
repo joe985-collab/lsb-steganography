@@ -7,7 +7,7 @@ import pickle
 
 # cover_image_loc = "./"+str(input("Choose a cover image in PNG format: "))
 np.set_printoptions(threshold=sys.maxsize)
-uncompressed_image = "./cat_secret.png"
+uncompressed_image = "./john_mcafee.png"
 # stego_image_loc = "./"+str(input("Choose name of the stego image: "))
 # secret_message = input("Enter your secret message: ");
 # print(cover_image_loc)
@@ -24,6 +24,7 @@ if width%8: width+=(8-width%8)
 req_dim = height
 if height>width: req_dim = width
 new_valid_dim = (width,height)
+dimensions = [height,width]
 padded_image = cv2.resize(read_cover_image,new_valid_dim)
 # print(padded_image)
 # cover_image_float = np.float32(padded_image)
@@ -49,7 +50,7 @@ for channels in range(3):
     # print(items)
     for m in items:
     	huffman_list.append(str(m))
-print(cover_image_float)
+# print(cover_image_float)
 # print(huffman_list)
 myHuffmanTree = hcoding.huffManTree(huffman_list)
 # print(myHuffmanTree[1])
@@ -65,7 +66,7 @@ for items in huffman_list:
     huffman_string += second_dict[items]
     huffman_string += " "
 # print(huffman_string)
-transferObj = [myHuffmanTree[0],first_dict,huffman_string]
+transferObj = [myHuffmanTree[0],first_dict,huffman_string,dimensions]
 with open('encoded1.txt','wb') as file:
     pickle.dump(transferObj,file)
 
